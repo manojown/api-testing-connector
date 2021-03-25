@@ -34,7 +34,10 @@ var f MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
 func main() {
 	l := fmt.Println
 	knt = 0
-	topic := os.Args[1] //"server/XVlBz"
+	topic := os.Args[1]
+	userName := os.Args[2]
+	password := os.Args[3] //"server/XVlBz"
+	//"server/XVlBz"
 	log.Println("Topic", topic)
 	var sentData model.Payload
 	c := make(chan os.Signal, 1)
@@ -43,8 +46,10 @@ func main() {
 	sentData.Server.Topic = topic
 	sentData.Action = "CONNECTION"
 
-	opts := MQTT.NewClientOptions().AddBroker("tcp://broker.mqtt-dashboard.com:1883")
+	opts := MQTT.NewClientOptions().AddBroker("mqtts://c4bfab5c0b76403f8b3a0259ed4ccdc3.s1.eu.hivemq.cloud:8883")
 	opts.SetClientID("mac-go")
+	opts.SetPassword(password)
+	opts.SetUsername(userName)
 	opts.SetDefaultPublishHandler(f)
 
 	opts.OnConnect = func(c MQTT.Client) {
