@@ -27,7 +27,7 @@ var f MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
 	// text := fmt.Sprintf("this is result msg #%d!", knt)
 	// log.Println("DOne", text)
 	knt++
-	token := client.Publish("nn/sensors", 2, false, out)
+	token := client.Publish("nn/sensors", 0, false, out)
 	token.Wait()
 }
 
@@ -37,6 +37,7 @@ func main() {
 	topic := os.Args[1]
 	userName := os.Args[2]
 	password := os.Args[3] //"server/XVlBz"
+	fmt.Println("userName", userName, password)
 	//"server/XVlBz"
 	log.Println("Topic", topic)
 	var sentData model.Payload
