@@ -33,6 +33,7 @@ type TestResponse struct {
 
 type Payload struct {
 	Uid          int64               `json:"uid"`
+	Responder    string              `json:"responder"`
 	Action       string              `json:"action"`
 	Server       ConnectConfirmation `json:"server"`
 	Conf         Configuration       `json:"conf"`

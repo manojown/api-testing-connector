@@ -17,18 +17,27 @@ var knt int
 
 var f MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
 	fmt.Printf("MSG: %s\n", msg.Payload())
+	msg.Ack()
 	var dataRecieved model.Payload
-	data := json.Unmarshal(msg.Payload(), &dataRecieved)
-	log.Println(":::", data)
+	_ = json.Unmarshal(msg.Payload(), &dataRecieved)
 	task := service.ActionFinder(dataRecieved)
+	task.Responder, _ = os.Hostname()
 	// data := ResponseHandler(msg.Payload())
 	out, _ := json.Marshal(task)
 	fmt.Println("called in mqtt subsciber :::")
 	// text := fmt.Sprintf("this is result msg #%d!", knt)
 	// log.Println("DOne", text)
 	knt++
-	token := client.Publish("nn/sensors", 0, false, out)
-	token.Wait()
+	// str := fmt.Sprintf("nn/sensors/%s", msg.Topic())
+	str := fmt.Sprintf("nn/sensors/1")
+
+	fmt.Println("Topic is", str)
+	token := client.Publish(str, 0, false, out)
+	_ = token.Wait()
+	if token.Error() != nil {
+		log.Fatal(token.Error()) // Use your preferred logging technique (or just fmt.Printf)
+	}
+
 }
 
 func main() {
@@ -54,7 +63,7 @@ func main() {
 	opts.SetDefaultPublishHandler(f)
 
 	opts.OnConnect = func(c MQTT.Client) {
-		if token := c.Subscribe(topic, 0, f); token.Wait() && token.Error() != nil {
+		if token := c.Subscribe(topic, 2, nil); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
 	}
@@ -69,6 +78,6 @@ func main() {
 		l("error : ", err)
 	}
 	// fmt.Println("dat is", data, sentData)
-	client.Publish("nn/sensors", 2, false, data)
+	client.Publish("nn/sensors/1", 0, false, data)
 	<-c
 }
