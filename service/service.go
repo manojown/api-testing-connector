@@ -81,7 +81,6 @@ func Initialize(conf *model.Configuration, sentResponse chan<- model.TestRespons
 	var done sync.WaitGroup
 	results := make(map[int]*Result)
 	timout := make(chan bool, 1)
-	// log.Println("conf.Time :::::", conf.Time)
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt)
 	go func() {

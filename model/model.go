@@ -1,7 +1,6 @@
 package model
 
 type Configuration struct {
-	Uid       int                 `json:"uid"`
 	URL       string              `json:"url"`
 	Requests  int64               `json:"requests"`
 	Time      int                 `json:"time"`
@@ -17,7 +16,7 @@ type Configuration struct {
 }
 
 type TestResponse struct {
-	Url             string `json:"url"`
+	URL             string `json:"url"`
 	TotalTimeTaken  int64  `json:"totalTime"`
 	TotalRequests   int64  `json:"totalRequests"`
 	SucessRequests  int64  `json:"sucessRequests"`
@@ -31,15 +30,13 @@ type TestResponse struct {
 	ServerIP        string `json:"serverIP"`
 }
 
-type Payload struct {
-	Uid          int64               `json:"uid"`
-	Responder    string              `json:"responder"`
-	Action       string              `json:"action"`
-	Server       ConnectConfirmation `json:"server"`
-	Conf         Configuration       `json:"conf"`
-	TestResponse TestResponse        `json:"testResponse"`
+type PayloadReciver struct {
+	UID  int64         `json:"uid"`
+	Ip   string        `json:"ip"`
+	Conf Configuration `json:"conf"`
 }
-type ConnectConfirmation struct {
-	Topic    string `json:"topic"`
-	ServerIP string `json:"serverIP"`
+type PayloadResponder struct {
+	UID          int64        `json:"uid"`
+	Responder    string       `json:"responder"`
+	TestResponse TestResponse `json:"testResponse"`
 }
