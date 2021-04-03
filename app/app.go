@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,6 +29,7 @@ func (app *App) run() {
 	signal.Notify(signalChennal, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, os.Interrupt, os.Kill)
 	go func() {
 		handler := cors.Default().Handler(app.Router)
+		log.Println("Server started on:3004")
 		http.ListenAndServe(":3004", handler)
 	}()
 	sig := <-signalChennal
