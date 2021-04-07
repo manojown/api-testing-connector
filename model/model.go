@@ -40,3 +40,35 @@ type PayloadResponder struct {
 	Responder    string       `json:"responder"`
 	TestResponse TestResponse `json:"testResponse"`
 }
+
+type Server struct {
+	Token         string     `json:"token" bson:"token"`
+	Port          string     `json:"port" bson:"port"`
+	RAM           MemStatus  `json:"ram" bson:"ram"`
+	DiskSpace     DiskStatus `json:"DiskSpace" bson:"DiskSpace"`
+	CPU           CPUStatus  `json:"cpu" bson:"cpu"`
+	LastConnected int64      `json:"lastConnected" bson:"lastConnected"`
+}
+
+type DiskStatus struct {
+	All  uint64 `json:"all"`
+	Used uint64 `json:"used"`
+	Free uint64 `json:"free"`
+}
+
+type CPUStatus struct {
+	Cores int     `json:"cores"`
+	Usage float64 `json:"usage"`
+}
+type MemStatus struct {
+	All  uint64 `json:"all"`
+	Used uint64 `json:"used"`
+	Free uint64 `json:"free"`
+	Self uint64 `json:"self"`
+}
+
+type Config struct {
+	Token string
+	URL   string
+	Port  string
+}

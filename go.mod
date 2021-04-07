@@ -7,5 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/manojown/api-testing v0.0.0-20210322135322-82cdd48d3929
 	github.com/rs/cors v1.7.0
+	github.com/shirou/gopsutil/v3 v3.21.3
 	github.com/valyala/fasthttp v1.22.0
+	google.golang.org/grpc v1.36.1
 )

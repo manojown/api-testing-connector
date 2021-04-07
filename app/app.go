@@ -10,16 +10,20 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/manojown/connector/app/handler"
+	"github.com/manojown/connector/model"
+	"github.com/manojown/connector/service"
 	"github.com/rs/cors"
 )
 
 type App struct {
 	Router *mux.Router
+	Config model.Config
 }
 
-func Initialize() {
+func Initialize(config model.Config) {
 	app := new(App)
 	app.Router = mux.NewRouter()
+	app.Config = config
 	app.setRouter()
 	app.run()
 }
@@ -32,6 +36,7 @@ func (app *App) run() {
 		log.Println("Server started on:3004")
 		http.ListenAndServe(":3004", handler)
 	}()
+	go service.Polling(app.Config)
 	sig := <-signalChennal
 	fmt.Println("Signal recieved", sig)
 }
@@ -40,6 +45,7 @@ func (app *App) setRouter() {
 
 	app.apiHandler("/test", "POST", handler.StartServices)
 	app.apiHandler("/ping", "GET", handler.Ping)
+	app.apiHandler("/connect", "GET", handler.Connect)
 
 	// app.apiHandler("/history/{id}", "GET", handler.GetHistory)
 	// app.apiHandler("/history", "DELETE", handler.DeteteHistory)
@@ -58,10 +64,10 @@ func (app *App) apiHandler(path string, method string, handler handlerFunction) 
 	app.Router.HandleFunc(path, app.funcHandler(handler)).Methods(method)
 }
 
-type handlerFunction func(w http.ResponseWriter, r *http.Request)
+type handlerFunction func(config model.Config, w http.ResponseWriter, r *http.Request)
 
 func (app *App) funcHandler(handler handlerFunction) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		handler(rw, r)
+		handler(app.Config, rw, r)
 	}
 }

@@ -12,10 +12,10 @@ import (
 	"github.com/manojown/connector/service"
 )
 
-func Ping(rw http.ResponseWriter, r *http.Request) {
+func Ping(config model.Config, rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(`{"message":"connected"}`)
 }
-func StartServices(rw http.ResponseWriter, r *http.Request) {
+func StartServices(config model.Config, rw http.ResponseWriter, r *http.Request) {
 	var payload model.PayloadReciver
 	var payloadResponder model.PayloadResponder
 	var conf model.Configuration
@@ -51,6 +51,6 @@ func StartServices(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func Connect(rw http.ResponseWriter, r *http.Request) {
-
+func Connect(config model.Config, rw http.ResponseWriter, r *http.Request) {
+	service.Polling(config)
 }
