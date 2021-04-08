@@ -1,6 +1,8 @@
 package model
 
 type Configuration struct {
+	ID        string              `json:"id,omitempty"`
+	UserID    string              `json:"userID,omitempty"`
 	URL       string              `json:"url"`
 	Requests  int64               `json:"requests"`
 	Time      int                 `json:"time"`
@@ -8,11 +10,9 @@ type Configuration struct {
 	Headers   []map[string]string `json:"headers"`
 	KeepAlive bool                `json:"keepAlive"`
 	Method    string              `json:"method"`
-	PostData  string              `json:"postData"`
-	Created   string              `json:"created"`
-	Action    string              `json:"action"`
-	Topic     string              `json:"topic"`
-	ServerIP  string              `json:"serverIP"`
+	Ips       []string            `json:"ips"`
+	PostData  []byte              `json:"postData"`
+	Created   int64               `json:"created"`
 }
 
 type TestResponse struct {
@@ -31,12 +31,14 @@ type TestResponse struct {
 }
 
 type PayloadReciver struct {
-	UID  int64         `json:"uid"`
-	Ip   string        `json:"ip"`
-	Conf Configuration `json:"conf"`
+	UserID    string        `json:"userID"`
+	RequestID string        `json:"requestID"`
+	Responder string        `json:"responder"`
+	Conf      Configuration `json:"conf"`
 }
 type PayloadResponder struct {
-	UID          int64        `json:"uid"`
+	UserID       string       `json:"userID"`
+	RequestID    string       `json:"requestID"`
 	Responder    string       `json:"responder"`
 	TestResponse TestResponse `json:"testResponse"`
 }

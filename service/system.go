@@ -25,9 +25,9 @@ func CpuUsage() model.CPUStatus {
 func Polling(config model.Config) {
 	log.Println("Polling Started", config)
 	var server model.Server
-
+	var pollUrl string = config.URL + "/" + "connector"
 	for {
-		time.Sleep(20 * time.Second)
+		time.Sleep(10 * time.Second)
 		server.Token = config.Token
 		server.Port = config.Port
 		server.CPU = CpuUsage()
@@ -35,7 +35,7 @@ func Polling(config model.Config) {
 		server.RAM = MemStat()
 		server.LastConnected = time.Now().Unix()
 		dataTosent, _ := json.Marshal(server)
-		go APICall(config.URL, "POST", dataTosent)
+		go APICall(pollUrl, "POST", dataTosent)
 	}
 
 	// APICall("http://localhost:8080/connector", "POST")

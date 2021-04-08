@@ -7,7 +7,6 @@ import (
 )
 
 func APICall(url string, method string, data []byte) {
-
 	req := fasthttp.AcquireRequest()
 	req.SetRequestURI(url)
 	req.Header.SetMethodBytes([]byte(method))
@@ -22,10 +21,10 @@ func APICall(url string, method string, data []byte) {
 	}
 
 	if statusCode == fasthttp.StatusOK || statusCode == fasthttp.StatusMovedPermanently {
-		log.Println("Request sent successfully.")
+		// log.Println("Request sent successfully.")
 
 	} else {
-		log.Println("Something went wrong from server please check server config.")
+		log.Println("Something went wrong from server please check server config.", statusCode)
 	}
 
 }
