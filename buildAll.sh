@@ -108,3 +108,5 @@ if [[ "${FAILURES}" != "" ]]; then
   echo "${SCRIPT_NAME} failed on: ${FAILURES}"
   exit 1
 fi
+
+mv connector-* download/
