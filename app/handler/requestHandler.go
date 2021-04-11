@@ -22,16 +22,13 @@ func StartServices(config model.Config, rw http.ResponseWriter, r *http.Request)
 	var payloadResponder model.PayloadResponder
 	var conf model.Configuration
 	d, _ := ioutil.ReadAll(r.Body)
+
 	responseReciever := make(chan model.TestResponse, 1)
 	log := log.New(os.Stdout, "StartTesting: ", log.LstdFlags)
 	err := json.Unmarshal(d, &payload)
-	log.Println("Called start service:payload", payload)
+	// log.Println("Called start service:payload", payload)
 	if err != nil {
-		log.Println("=======")
-
 		log.Println(err)
-		log.Println("=======")
-
 	}
 	conf = payload.Conf
 

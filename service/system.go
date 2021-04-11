@@ -27,7 +27,7 @@ func Polling(config model.Config) {
 	var server model.Server
 	var pollUrl string = config.URL + "/" + "connector"
 	for {
-		time.Sleep(10 * time.Second)
+		time.Sleep(30 * time.Second)
 		server.Token = config.Token
 		server.Port = config.Port
 		server.CPU = CpuUsage()

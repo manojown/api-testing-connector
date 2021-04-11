@@ -33,7 +33,14 @@ func (app *App) run() {
 	signal.Notify(signalChennal, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, os.Interrupt, os.Kill)
 	go func() {
 		handler := cors.Default().Handler(app.Router)
-		log.Println("Server started on:3004")
+
+		if app.Config.Port == "" {
+			app.Config.Port = "3004"
+		}
+		app.Config.Port = fmt.Sprintf(":%s", app.Config.Port)
+		log.Printf("server is running On %s", app.Config.Port)
+		http.ListenAndServe(app.Config.Port, handler)
+
 		http.ListenAndServe(":3004", handler)
 	}()
 	go service.Polling(app.Config)
