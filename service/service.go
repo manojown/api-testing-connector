@@ -23,6 +23,7 @@ type Result struct {
 	failed        int64
 	networkFailed int64
 	badFailed     int64
+	responseTime  int64
 }
 
 var readThroughput int64
@@ -61,12 +62,16 @@ func printResult(results map[int]*Result, sentResponse chan<- model.TestResponse
 		testResult.SucessRequests += result.success
 		testResult.FailedRequests += result.badFailed
 		testResult.NetworkFailed += result.networkFailed
+		testResult.ResponseTime += result.responseTime
 
 	}
 	// fmt.Println("readThroughput, writeThroughput ::::", readThroughput, writeThroughput)
 	// fmt.Println("called data:", totalTime)
 	testResult.ReadThroughput = readThroughput / (kb * 8)
 	testResult.WriteThroughput = writeThroughput / (kb * 8)
+	if testResult.ResponseTime > 0 && testResult.SucessRequests > 0 {
+		testResult.ResponseTime = testResult.ResponseTime / testResult.SucessRequests
+	}
 
 	// fmt.Printf("total Request count :                %10d/hits\n", testResult.TotalRequests)
 	// fmt.Printf("total success Request is :           %10d/hits\n", testResult.SucessRequests)
@@ -152,7 +157,10 @@ func doRequest(url string, result *Result, conf *model.Configuration) {
 
 	req.SetBody([]byte(conf.PostData))
 	resp := fasthttp.AcquireResponse()
+	processStartTime := time.Now()
 	err := myClient.Do(req, resp)
+	t := time.Now()
+	responseTime := t.Sub(processStartTime).Microseconds()
 	statusCode := resp.StatusCode()
 	result.request++
 	fasthttp.ReleaseRequest(req)
@@ -163,6 +171,7 @@ func doRequest(url string, result *Result, conf *model.Configuration) {
 	}
 
 	if statusCode == fasthttp.StatusOK || statusCode == fasthttp.StatusMovedPermanently {
+		result.responseTime += responseTime
 		result.success++
 	} else {
 		result.badFailed++

@@ -28,6 +28,7 @@ type TestResponse struct {
 	Action          string `json:"action"`
 	Topic           string `json:"topic"`
 	ServerIP        string `json:"serverIP"`
+	ResponseTime    int64  `json:"responseTime"`
 }
 
 type PayloadReciver struct {
